@@ -22,11 +22,11 @@ namespace {
             }
 
             // パケット受信
-//#ifdef AVOID_TX
+//#ifdef ZERO_COPY_TX
 //			pull_avoid(vq_guest_to_tx, num_fin);
 //#else
             for (int j = 0; j < num_fin; j++) {
-#ifdef RANDOM
+#ifdef RANDOM_BUFFER
                 recv_addrs[j] = &pool_tx_addr[local_pool_index + (int) ids[j]];
 #else
                 recv_addrs[j] = &pool_tx_addr[local_pool_index + j];
@@ -54,7 +54,7 @@ namespace {
              }
         }
 
-#ifndef AVOID_TX
+#ifndef ZERO_COPY_TX
             delete[](recv_addrs);
             delete[](pool_tx_addr);
 #endif

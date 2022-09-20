@@ -36,11 +36,10 @@
 
 //#define SKIP_CLT
 
-//#define ZERO_COPY
-//#define AVOID_SRV
-//#define AVOID_TX
+#define ZERO_COPY_RX
+#define ZERO_COPY_TX
 
-// #define RANDOM
+// #define RANDOM_BUFFER
 
 #if 0
 #define STRIDE_VQ

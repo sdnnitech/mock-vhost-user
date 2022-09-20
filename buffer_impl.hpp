@@ -102,7 +102,7 @@ void send_rx_to_guest(vq *vq_rx_to_guest, buf *mbuf_start, buf **pool_host_addr,
     for (int i = 0; i < num_fin; i++) {
         if (!is_stream) {
         //if (false) {
-#ifndef ZERO_COPY
+#ifndef ZERO_COPY_RX
             memcpy(pool_guest_addr[i], (void *) pool_host_addr[i]->addr, SIZE_PACKET);
             //cldemote(pool_guest_addr[i]);
             //_mm_clflushopt(pool_guest_addr[i]);
@@ -143,7 +143,7 @@ void send_rx_to_guest(vq *vq_rx_to_guest, buf *mbuf_start, buf **pool_host_addr,
 #else
         for(int i = 0; i < num_fin; i++) {
 #endif
-#ifdef RANDOM
+#ifdef RANDOM_BUFFER
         set_param(&vq_rx_to_guest->descs[last_avail_idx_shadow], vq_rx_to_guest->last_pool_idx + ids[i]);
 #else
         set_param(&vq_rx_to_guest->descs[last_avail_idx_shadow], vq_rx_to_guest->last_pool_idx + i);
@@ -165,7 +165,7 @@ void send_rx_to_guest(vq *vq_rx_to_guest, buf *mbuf_start, buf **pool_host_addr,
 
 #ifdef SKIP_INDEX
     for (int i = 0; i < skipped_index; i++) {
-#ifdef RANDOM
+#ifdef RANDOM_BUFFER
         set_param(&vq_rx_to_guest->descs[a + i], vq_rx_to_guest->last_pool_idx + ids[i]);
 #else
         set_param(&vq_rx_to_guest->descs[a + i], vq_rx_to_guest->last_pool_idx + i);
@@ -191,7 +191,7 @@ void send_guest_to_tx(vq *vq_guest_to_tx, buf *mbuf_start, buf **pool_host_addr,
     for (int i = 0; i < num_fin; i++) {
         if (!is_stream) {
         //if (false) {
-#ifndef AVOID_TX
+#ifndef ZERO_COPY_TX
             memcpy((void *) (pool_host_addr[i]->addr), pool_guest_addr[i], SIZE_PACKET);
             //cldemote(pool_host_addr[i]->addr);
             //_mm_clflushopt(pool_host_addr[i]->addr);

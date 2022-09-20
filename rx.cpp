@@ -25,7 +25,7 @@ namespace {
             }
 
             for (int j = 0; j < num_fin; j++, i--) {
-#ifdef RANDOM
+#ifdef RANDOM_BUFFER
                 send_addrs[j] = &pool_rx_addr[local_pool_index + (int) ids[j]];
 #else
                 send_addrs[j] = &pool_rx_addr[local_pool_index + j];
@@ -33,7 +33,7 @@ namespace {
                 ((packet *) (send_addrs[j]->addr))->packet_id = i;
                 ((packet *) (send_addrs[j]->addr))->packet_len = SIZE_PACKET;
 
-#ifdef RANDOM
+#ifdef RANDOM_BUFFER
                 int offset = sizeof(buf) * (vq_rx_to_guest->last_pool_idx + ids[j]) + sizeof(mbuf_header) +
                              PACKET_BUFFER_PADDING;
 #else
@@ -52,7 +52,7 @@ namespace {
             }
         }
 
-#ifndef ZERO_COPY
+#ifndef ZERO_COPY_RX
         delete[](send_addrs);
         delete[](pool_rx_addr);
 #endif
