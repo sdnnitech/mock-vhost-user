@@ -34,10 +34,10 @@
 #define MBUF_HEADER_SIZE 128
 //#define MBUF_HEADER_SIZE 1024
 
-#define ZERO_COPY_RX
-#define ZERO_COPY_TX
+//#define ZERO_COPY_RX
+//#define ZERO_COPY_TX
 
-// #define RANDOM_BUFFER
+// #define RANDOM
 
 #if 0
 #define STRIDE_VQ

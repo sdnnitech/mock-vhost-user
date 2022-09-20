@@ -22,9 +22,6 @@ namespace {
             }
 
             // パケット受信
-//#ifdef ZERO_COPY_TX
-//			pull_avoid(vq_guest_to_tx, num_fin);
-//#else
             for (int j = 0; j < num_fin; j++) {
 #ifdef RANDOM_BUFFER
                 recv_addrs[j] = &pool_tx_addr[local_pool_index + (int) ids[j]];
@@ -47,16 +44,16 @@ namespace {
             }
 
 
-             if (unlikely((i & 8388607) == 0)) {
+            if (unlikely((i & 8388607) == 0)) {
 #ifdef PRINT
                 print((packet*)&recv_addrs[0]->addr);
 #endif
-             }
+            }
         }
 
 #ifndef ZERO_COPY_TX
-            delete[](recv_addrs);
-            delete[](pool_tx_addr);
+        delete[](recv_addrs);
+        delete[](pool_tx_addr);
 #endif
     }
 }
@@ -66,8 +63,8 @@ int main(int argc, char **argv) {
     // 初期設定
     int bfd = open_shmfile("shm_buf", SIZE_SHM, false);
     buf *pool_guest_addr = (buf *) mmap(NULL, SIZE_SHM, PROT_READ | PROT_WRITE, MAP_SHARED, bfd, 0);
-    vq *vq_rx_to_guest = (vq *) (pool_guest_addr + POOL_ENTRY_NUM);
-    vq *vq_guest_to_tx = (vq *) (vq_rx_to_guest + 1);
+    vq *vq_rx_to_guest = (vq * )(pool_guest_addr + POOL_ENTRY_NUM);
+    vq *vq_guest_to_tx = (vq * )(vq_rx_to_guest + 1);
 
     info_opt opt = get_opt(argc, argv);
 
@@ -84,9 +81,7 @@ int main(int argc, char **argv) {
     std::chrono::system_clock::time_point start, end;
     start = std::chrono::system_clock::now();
 
-    while(*(volatile bool*)flag == true) {
-        ;
-    }
+    recv_packet(vq_guest_to_tx, pool_guest_addr, opt);
 
     // 計測終了
     end = std::chrono::system_clock::now();
