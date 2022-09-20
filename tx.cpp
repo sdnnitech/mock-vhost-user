@@ -84,13 +84,9 @@ int main(int argc, char **argv) {
     std::chrono::system_clock::time_point start, end;
     start = std::chrono::system_clock::now();
 
-#ifndef SKIP_CLT
-    recv_packet(vq_guest_to_tx, pool_guest_addr, opt);
-#else
     while(*(volatile bool*)flag == true) {
         ;
     }
-#endif
 
     // 計測終了
     end = std::chrono::system_clock::now();

@@ -81,11 +81,9 @@ void send_rx_to_guest(vq *vq_rx_to_guest, buf *mbuf_start, buf **pool_host_addr,
     //    PREFETCH_POOL(pool_guest_addr[i]);
     }
 
-#ifndef SKIP_CLT
     for (int i = 0; i < num_fin; i++) {
         wait_push(vq_rx_to_guest, vq_rx_to_guest->last_avail_idx + i);
     }
-#endif
 
 #if MBUF_HEADER_SIZE > 0
     for (int i = 0; i < num_fin; i++) {

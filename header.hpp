@@ -34,8 +34,6 @@
 #define MBUF_HEADER_SIZE 128
 //#define MBUF_HEADER_SIZE 1024
 
-//#define SKIP_CLT
-
 #define ZERO_COPY_RX
 #define ZERO_COPY_TX
 
